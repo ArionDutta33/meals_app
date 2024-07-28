@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/categories.dart';
+import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
 
@@ -30,12 +31,12 @@ class _TabsScreenState extends State<TabsScreen> {
       setState(() {
         _favouriteMeals.remove(meal);
       });
-      _showSnackbar("Added a favourite meal");
+      _showSnackbar("Removed favourite");
     } else {
       setState(() {
         _favouriteMeals.add(meal);
       });
-      _showSnackbar("Removed favourite");
+      _showSnackbar("Added a favourite meal");
     }
   }
 
@@ -43,6 +44,19 @@ class _TabsScreenState extends State<TabsScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  void _setScreen(String identifier) {
+    if (identifier == "Filters") {
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FilterScreen(),
+          ));
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -63,7 +77,9 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      drawer: const MainDrawer(),
+      drawer: MainDrawer(
+        onSelect: _setScreen,
+      ),
       body: activePage,
       bottomNavigationBar: Container(
         color: Colors.black,
@@ -84,7 +100,7 @@ class _TabsScreenState extends State<TabsScreen> {
               ),
               GButton(
                 icon: Icons.star,
-                text: "Fvourites",
+                text: "Favourites",
               )
             ],
           ),
